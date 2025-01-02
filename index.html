@@ -1,263 +1,48 @@
+extends base
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>   Feng&#39; Blog</title>
-  <meta name="description" content="A minimalist theme for hexo.">
-  <!-- 标签页图标 -->
-  
-    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
-  
+block title
+  if config.subtitle
+    title= config.title + ' | ' + config.subtitle
+  else
+    title= config.title
 
-  <!-- 图标库 -->
-  <link href="https://cdn.jsdelivr.net/npm/remixicon@2.2.0/fonts/remixicon.css" rel="stylesheet">
+block content
+  for post in page.posts.toArray()
+    .post
+      h1.post-title
+        if post.sticky
+          span(class="top-post")= __('Sticky')
+        include _partial/helpers.pug
+        a(href=url_for(post.path))
+          +title(post)
+      .post-meta= post.date.format(config.date_format)
+      if theme.disqus.enable == true
+        a.disqus-comment-count(data-disqus-identifier=post.path, href=url_for(post.path) + '#disqus_thread')
+      if theme.changyan
+        a.ds-thread-count(href=url_for(post.path) + '#SOHUCS')
+          span.cy_cmt_count(id='sourceId::' + post.date.valueOf() style='margin: 0 3px 0 1px;') 0
+          span= ' ' + __('Comment')
+      if post.description
+        .post-content
+          != post.description
+      else if post.excerpt
+        .post-content
+          != post.excerpt
+      else if post.content
+        - const content = strip_html(post.content)
+        - let expert = content.substring(0,theme.post_content_length)
+        - content.length > theme.post_content_length ? expert += '...' : ''
+        .post-content
+          != expert
+      p.readmore
+        a(href=url_for(post.path))= __('Readmore')
 
-  <!-- css文件 -->
-  
-<link rel="stylesheet" href="/css/white.css">
-
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@200;300;400;700;900&family=Roboto+Mono&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/vs.css">
-  <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
-
-<meta name="generator" content="Hexo 7.3.0"></head>
-
-
-<body>
-
-<div class="universal-outer">
-  
-<div class="menu-outer">
-    <div class="menu-inner">
-        <div class="menu-site-name">
-            <a href="/">
-                Feng&#39; Blog
-            </a>
-        </div>
-        <div class="menu-group">
-            <ul class="menu-ul">
-                
-                <a href="/" class="nav-link">
-                    <li class="menu-li">
-                        首页
-                    </li>
-                </a>
-                
-                <a href="/page" class="nav-link">
-                    <li class="menu-li">
-                        页面
-                    </li>
-                </a>
-                
-                <li class="menu-li" id="mobile-menu">
-                    <i class="ri-menu-line"></i>
-                </li>
-<!--                <li class="menu-li" id="theme-change-btn">-->
-<!--                    默认-->
-<!--                </li>-->
-
-            </ul>
-
-        </div>
-
-    </div>
-</div>
-<!--移动端-->
-<div id="mobile-main">
-    <div class="mobile-menu-inner">
-        <div class="mobile-menu-site-name">
-            <a href="/">
-                Feng&#39; Blog
-            </a>
-        </div>
-        <div class="mobile-menu-group" id="mobile-close">
-            <i class="ri-close-line"></i>
-        </div>
-
-    </div>
-
-    <div class="mobile-menu-div">
-        
-        <a href="/" class="mobile-nav-link">
-            <div class="mobile-menu-child">
-                <span>首页</span>
-            </div>
-        </a>
-        
-        <a href="/page" class="mobile-nav-link">
-            <div class="mobile-menu-child">
-                <span>页面</span>
-            </div>
-        </a>
-        
-    </div>
-
-
-</div>
-
-  <div class="body-outer">
-    <div class="body-inner">
-      
-
-
-    <section class="simple-outer">
-    <section class="simple-inner common-typographic">
-        <div class="simple-post-list">
-            
-                <div class="item-divider item-homepage">
-                    <div class="homepage-title">👋 Hello</div>
-
-
-
-
-    <div class="homepage-content">
-        <p>A <a target="_blank" rel="noopener" href="https://github.com/FuShaoLei/hexo-theme-white">White</a> theme for <a target="_blank" rel="noopener" href="http://hexo.io/">Hexo</a></p>
-
-    </div>
-
-
-<p class="homepage-contact">
-    
-        <a href="https://github.com/fengz63" target="_blank">
-            <i class="ri-github-line"></i>
-        </a>
-    
-        <a href="mailto:fe.zhang@foxmail.com" target="_blank">
-            <i class="ri-mail-line"></i>
-        </a>
-    
-        <a href="https://music.163.com/" target="_blank">
-            <i class="ri-netease-cloud-music-line"></i>
-        </a>
-    
-        <a href="https://bilibili.com/" target="_blank">
-            <i class="ri-bilibili-line"></i>
-        </a>
-    
-        <a href="https://youtube.com/" target="_blank">
-            <i class="ri-youtube-line"></i>
-        </a>
-    
-</p>
-                </div>
-            
-            
-                <div class="simple-post-item item-divider">
-                    <div class="simple-item-left">
-                        <div class="simple-item-meta">
-                            <div class="simple-meta-date">2025年01月02日</div>
-                        </div>
-                        <a href="/2025/01/02/%E9%87%8D%E5%BA%86%E4%B9%8B%E8%A1%8C/">
-                            <div class="simple-post-title">
-                                
-                                    重庆之行
-                                
-                            </div>
-                        <div class="simple-post-excerpt">
-                            
-                                2024年12月21日和22日进行了为期两天的重庆之行。早上6点45的飞机让我一大早起来开车去机场，停车、安检、候机，等坐在飞机上那一刻已经是6点15了，虽然非常困，但是想着马上可以去自己想去的地方还是蛮开心的。飞机上看到了非常壮观的云层：
-    ...
-                            
-                        </div>
-                        </a>
-                    </div>
-                    
-                </div>
-            
-                <div class="simple-post-item item-divider">
-                    <div class="simple-item-left">
-                        <div class="simple-item-meta">
-                            <div class="simple-meta-date">2025年01月01日</div>
-                        </div>
-                        <a href="/2025/01/01/%E5%BC%80%E5%A7%8B/">
-                            <div class="simple-post-title">
-                                
-                                    新年快乐
-                                
-                            </div>
-                        <div class="simple-post-excerpt">
-                            
-                                新年第一天今天是2025年1月1日，新年的第一天，今天开始打算维护一个自己的blog，这是开始。不管怎么说，新的一年，希望事事顺心，新年快乐！
-
-                            
-                        </div>
-                        </a>
-                    </div>
-                    
-                </div>
-            
-        </div>
-    </section>
-    
-</section>
-
-
-    </div>
-  </div>
-
-  <!-- 如果是home模式的话，不在首页就显示footer，如果不是home模式的话 所有都显示footer -->
-  
-    <div class="footer-outer">
-    <div class="footer-inner">
-        <div class="footer-text">
-            <p>Power by <a target="_blank" rel="noopener" href="http://hexo.io/">Hexo</a> Theme by <a target="_blank" rel="noopener" href="https://github.com/FuShaoLei/hexo-theme-white">White</a></p>
-
-        </div>
-        <div class="footer-contact">
-            <ul class="footer-ul">
-                
-                <li class="footer-li">
-                    <a href="https://github.com/fengz63" target="_blank">
-                        <i class="ri-github-line"></i>
-                    </a>
-                </li>
-                
-                <li class="footer-li">
-                    <a href="mailto:fe.zhang@foxmail.com" target="_blank">
-                        <i class="ri-mail-line"></i>
-                    </a>
-                </li>
-                
-                <li class="footer-li">
-                    <a href="https://music.163.com/" target="_blank">
-                        <i class="ri-netease-cloud-music-line"></i>
-                    </a>
-                </li>
-                
-                <li class="footer-li">
-                    <a href="https://bilibili.com/" target="_blank">
-                        <i class="ri-bilibili-line"></i>
-                    </a>
-                </li>
-                
-                <li class="footer-li">
-                    <a href="https://youtube.com/" target="_blank">
-                        <i class="ri-youtube-line"></i>
-                    </a>
-                </li>
-                
-            </ul>
-        </div>
-    </div>
-</div>
-
-  
-</div>
-
-
-
-
-<script src="/js/white.js"></script>
-
-<script>
-    hljs.highlightAll();
-</script>
-
-
-</body>
-</html>
+  include _partial/paginator.pug
+  if theme.disqus.enable == true
+    script#dsq-count-scr(src='//'+ theme.disqus.shortname + '.disqus.com/count.js', async)
+  if theme.changyan
+    script#cy_cmt_num(src='https://changyan.sohu.com/upload/plugins/plugins.list.count.js?clientId=' + theme.changyan, async)
+  if config.mathjax
+    include _partial/mathjax.pug
+  if config.mathjax2
+    include _partial/mathjax2.pug
